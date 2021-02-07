@@ -72,7 +72,6 @@
 </template>
 
 <script>
-
     import {getCommodity} from '@/api/commodityAndShop';
 
     export default {
