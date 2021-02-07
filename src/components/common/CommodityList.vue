@@ -1,6 +1,6 @@
 <template>
     <van-grid :border="false" :column-num="2">
-        <van-grid-item v-for="(item,index) in commodityList" :key="index">
+        <van-grid-item @click="getCommodityDetail(item.id)" v-for="(item,index) in commodityList" :key="index">
             <img class="goodsPicture" :src="item.imgUrl" alt="">
             <p>{{cutWords(item.name)}}</p>
             <div class="goodsPrice">
@@ -37,6 +37,9 @@
                 if(typeof num==='number'){
                     return '$'+num
                 }
+            },
+            getCommodityDetail(id){
+                this.$router.push({name:'commodity',params:{id:id}})
             }
         }
     };

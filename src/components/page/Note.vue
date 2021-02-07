@@ -97,7 +97,7 @@
         methods:{
             async getCommodity(){
                 try{
-                    let result=await getCommodity('/queryCommodity',{id:'commodity1611882246996'})
+                    let result=await getCommodity('/queryCommodity',{id:this.$route.params.id})
                     console.log(result.data)
                     let commodity=result.data
                     this.name=commodity.name

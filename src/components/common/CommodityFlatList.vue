@@ -1,6 +1,6 @@
 <template>
     <div class="commodity-flat-list">
-        <div class="commodity-flat-item" v-for="(item,index) in commodityList" :key="index">
+        <div @click="getCommodityDetail(item.id)" class="commodity-flat-item" v-for="(item,index) in commodityList" :key="index">
             <img :src="item.imgUrl" alt="">
             <div class="commodity-info">
                 <p class="commodity-name">{{item.name}}</p>
@@ -25,6 +25,11 @@
                 }
             }
         },
+        methods:{
+            getCommodityDetail(id){
+                this.$router.push({name:'commodity',params:{id:id}})
+            }
+        }
     };
 </script>
 

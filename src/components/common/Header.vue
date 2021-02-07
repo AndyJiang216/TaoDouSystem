@@ -157,7 +157,31 @@
                     credit:99,
                     member:6771579
                 }
-                addShop('/addShop',shop2).then(res=>{
+                const shop3={
+                    name:'LV官方旗舰店',
+                    type:'鞋类',
+                    beginTime:'2009-11-08',
+                    credit:98,
+                    member:7871531,
+                    imgUrl:'http://localhost:3000/shop/file1612660164646.jpg'
+                }
+                const shop4={
+                    name:'ZARA中国官方旗舰店',
+                    type:'鞋类',
+                    beginTime:'2015-07-18',
+                    credit:99,
+                    member:1258901,
+                    imgUrl:'http://localhost:3000/shop/file1612660164645.jpg'
+                }
+                const shop5={
+                    name:'山本耀司官方旗舰店',
+                    type:'鞋类',
+                    beginTime:'2016-09-16',
+                    credit:99,
+                    member:174780,
+                    imgUrl:'http://localhost:3000/shop/file1612660203485.jpg'
+                }
+                addShop('/addShop',shop5).then(res=>{
                     console.log(res)
                 }).catch(err=>{
                     console.error(err)

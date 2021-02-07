@@ -14,8 +14,8 @@ export default {
         return {
             functionList:[
                 {name:'影单',icon:require('@/assets/img/movie.png')},
-                {name:'市场',icon:require('@/assets/img/market.png')},
-                {name:'笔记',icon:require('@/assets/img/note.png')},
+                {name:'周边',icon:require('@/assets/img/around.png')},
+                {name:'商城',icon:require('@/assets/img/market.png')},
                 {name:'我的',icon:require('@/assets/img/personal.png')}
             ]
         };
