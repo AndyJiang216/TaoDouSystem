@@ -120,6 +120,7 @@
         created() {
             /*获取默认商品列表项数据*/
             getAllCommodityListItems('/queryAllCommodityListItems').then(res=>{
+                console.log(res)
                 const result=res.data
                 this.commodityListArr=result
             }).catch(err=>{

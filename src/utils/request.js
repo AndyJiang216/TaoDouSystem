@@ -4,6 +4,7 @@ import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据，�
 import { Message } from 'element-ui'    //引入 element-ui 的 Message 模块，用于信息提示
 import store from '@/store'     //引入 vuex 中的数据
 import router from '@/router/index.js';
+import el from 'element-ui/src/locale/lang/el';
 
 // create an axios instance   创建axios实例
 const service = axios.create({
@@ -51,7 +52,30 @@ service.interceptors.response.use(
         // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
         // 否则的话抛出错误
         if (response.status === 200) {
-            return Promise.resolve(response);
+            if(response.data.code === 401){
+                router.replace({
+                    path: '/login',
+                    query: {
+                        redirect: router.currentRoute.fullPath
+                    }
+                });
+            }else if(response.data.code === 404){
+                router.replace({
+                    path: '/404',
+                    query: {
+                        redirect: router.currentRoute.fullPath
+                    }
+                });
+            }else if(response.data.code === 200){
+                return Promise.resolve(response);
+            }else{
+                Message({
+                    message: response.data.msg,
+                    duration: 1000,
+                    forbidClick: true
+                });
+                return Promise.reject(response);
+            }
         } else {
             console.error(JSON.stringify(response))
             return Promise.reject(response);

@@ -31,12 +31,13 @@
         </div>
         <!--商品购买-->
         <van-goods-action>
-            <van-goods-action-icon icon="chat-o" text="客服" color="#ee0a24" />
+            <van-goods-action-icon icon="chat-o" @click="showService=true" text="客服" color="#ee0a24" />
             <van-goods-action-icon icon="cart-o" text="购物车" />
             <van-goods-action-icon icon="star" text="已收藏" color="#ff5000" />
             <van-goods-action-button color="#be99ff" type="warning" text="加入购物车" />
             <van-goods-action-button @click="showBuy=true" color="#7232dd" type="danger" text="立即购买" />
         </van-goods-action>
+        <!--商品购买弹出框-->
         <van-action-sheet class="buy-choice-form" v-model="showBuy">
             <div class="buy-header">
                 <img :src="swipeImgList[0]" alt="">
@@ -68,6 +69,20 @@
                 </div>
             </div>
         </van-action-sheet>
+        <!--商品店铺客服弹出框-->
+        <van-action-sheet class="buy-choice-form" v-model="showService">
+            <div class="buy-header">
+                <h3>淘豆客服</h3>
+                <i role="button" @click="hiddenBuyPopup" class="van-icon van-icon-cross van-popup__close-icon"></i>
+            </div>
+            <div class="buy-content">
+
+            </div>
+            <div class="buy-input">
+                <input type="text" class="buy-input-service" v-model="serviceContent">
+                <button class="buy-service-submit" @click="submitServiceContent">发送</button>
+            </div>
+        </van-action-sheet>
     </div>
 </template>
 
@@ -80,6 +95,7 @@
             return {
                 show:false,//商品参数
                 showBuy:false,//商品购买参数
+                showService:false,//商品店铺客服界面
                 current:0,//轮播图指示器
                 swipeImgList:[],//轮播图图片数组
                 name:'',//商品名称
@@ -90,14 +106,15 @@
                 detailImgList:[],//商品详情图数组
                 chosenParameters:[],//最终提交的商品参数选择信息
                 quantity:1,//购买商品数量
-                activatedIndex:[]//商品提交表单当前点击参数选项
+                activatedIndex:[],//商品提交表单当前点击参数选项
+                serviceContent:'',//客服聊天对话框输入内容
+                websocket:null,//websocket连接对象
             }
         },
         methods:{
             async getCommodity(){
                 try{
                     let result=await getCommodity('/queryCommodity',{id:this.$route.params.id})
-                    console.log(result.data)
                     let commodity=result.data
                     this.name=commodity.name
                     this.swipeImgList=JSON.parse(commodity.showImgList)
@@ -121,10 +138,43 @@
             },
             hiddenBuyPopup(){
                 this.showBuy=false
+                this.showService=false
+            },
+            submitServiceContent(){
+                this.websocket.send(this.serviceContent)
+            },
+            /*websocket相关使用函数*/
+            initWebSocket(){
+                const wsurl="ws://localhost:3000"
+                this.websocket=new WebSocket(wsurl)
+                this.websocket.onmessage=this.websocketonmessage
+                this.websocket.onopen=this.websocketonopen
+                this.websocket.onerror=this.websocketonerror
+                this.websocket.onclose=this.websocketclose
+            },
+            websocketonopen(){
+                this.websocketsend('尝试连接')
+            },
+            websocketonerror(){
+                console.log('socket已断开,尝试重连...')
+                this.initWebSocket()
+            },
+            websocketonmessage(e){
+                console.log(e.data)
+            },
+            websocketsend(data){
+                this.websocket.send(data)
+            },
+            websocketclose(e){
+                console.log('断开连接',e)
             }
         },
         created() {
             this.getCommodity()
+            this.initWebSocket()
+        },
+        destroyed() {
+            this.websocket.close()
         }
     };
 </script>

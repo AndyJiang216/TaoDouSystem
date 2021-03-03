@@ -5,6 +5,11 @@ export function login(url,usernamePassword) {
     return post(url,usernamePassword)
 }
 
+/*用户注册*/
+export function register(url,usernamePassword) {
+    return post(url,usernamePassword)
+}
+
 /*用户登出*/
 export function logout(url) {
     return get(url)

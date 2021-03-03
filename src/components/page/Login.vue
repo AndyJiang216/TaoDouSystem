@@ -19,7 +19,10 @@
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm()">登录</el-button>
+                    <el-button type="primary" @click="submitLogin()">登录</el-button>
+                </div>
+                <div class="login-btn">
+                    <el-button type="primary" @click="submitRegister()">注册</el-button>
                 </div>
                 <p class="login-tips">Tips : 请输入对应身份权限的用户名密码。</p>
             </el-form>
@@ -28,13 +31,13 @@
 </template>
 
 <script>
-import {login,getAllUsers} from '@/api/index.js'
+import {login,register,getAllUsers} from '@/api/index.js'
 export default {
     data: function() {
         return {
             param: {
-                username: 'admin',
-                password: 'beidou',
+                username: 'JiangLong',
+                password: '123456',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -43,25 +46,34 @@ export default {
         };
     },
     methods: {
-        submitForm() {
+        submitLogin() {
             const usernamePassword=this.param
             login('/login',usernamePassword).then(successResponse=>{
-                console.log(JSON.stringify(successResponse))
-                /*if(successResponse.code==20000){
-                    this.$message.success('登录成功');
-                    this.$store.commit('LOGIN',successResponse.data.token)
-                    this.$store.commit('SETROLE',successResponse.data.role)
-                    localStorage.setItem('ms_username', usernamePassword.username);
-                    this.$router.push('/');
-                }*/
-                getAllUsers('/findAllUsers').then(result=>{
-                    console.log(result);
-                })
+                this.$message.success('登录成功')
+                if(this.$route.query.redirect){
+                    this.$router.push(this.$route.query.redirect)
+                }else {
+                    this.$router.push('/')
+                }
             }).catch(failureResponse=>{
                 console.error(JSON.stringify(failureResponse))
                 return false
             })
         },
+        submitRegister(){
+            const usernamePassword=this.param
+            register('/register',usernamePassword).then(successResponse=>{
+                this.$message.success('注册成功')
+                if(this.$route.query.redirect){
+                    this.$router.push(this.$route.query.redirect)
+                }else {
+                    this.$router.push('/')
+                }
+            }).catch(failureResponse=>{
+                console.error(JSON.stringify(failureResponse))
+                return false
+            })
+        }
     },
 };
 </script>
@@ -71,7 +83,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../../assets/img/loginBackground.jpg);
+    background-image: url(../../assets/img/appLoginBackground.jpg);
     background-size: 100%;
 }
 .ms-title {
